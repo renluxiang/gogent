@@ -65,7 +65,7 @@ func (b *BaseAgent) SetName(name string) {
 	b.name = name
 }
 
-func (b *BaseAgent) WithPrompt(prompt string) *BaseAgent {
+func (b *GenericAgent) WithPrompt(prompt string) *GenericAgent {
 	b.prompt = prompt
 	return b
 }
@@ -74,19 +74,19 @@ func (b *BaseAgent) GetPrompt() string {
 	return b.prompt
 }
 
-func (b *BaseAgent) WithSystemPrompt(prompt string) *BaseAgent {
+func (b *GenericAgent) WithSystemPrompt(prompt string) *GenericAgent {
 	b.systemPrompt = prompt
 	return b
 }
 
-func (b *BaseAgent) GetSystemPrompt() string {
+func (b *GenericAgent) GetSystemPrompt() string {
 	return b.systemPrompt
 }
-func (b *BaseAgent) GetName() string {
+func (b *GenericAgent) GetName() string {
 	return b.name
 }
 
-func (b *BaseAgent) GetTools() []ITool {
+func (b *GenericAgent) GetTools() []ITool {
 	return b.tools
 }
 
@@ -141,7 +141,7 @@ func (g *GenericAgent) Start() {
 	for i, tool := range g.tools {
 		toolPrompt += fmt.Sprintf("%d: namespace: %s name: %s description: %s \n", i, tool.GetNamespace(), tool.GetName(), tool.GetDescription())
 	}
-	toolPrompt += `Tools can be used in combination. Use line breaks to separate tool calls and add the prefix "call:", e.g., call:packageName.funcName(args1,args2). The tool will return the execution result to you. Note that even if there are many parameters, each tool call must be written on a single line without line breaks.
+	toolPrompt += `Tools can be used in combination. Use line breaks to separate tool calls and add the prefix "call:", e.g., call:packageName.funcName(args1,args2). string args need "", The tool will return the execution result to you. Note that even if there are many parameters, each tool call must be written on a single line without line breaks.
 Your response should follow the format below. If you believe you have completed the task, write the final answer:
 `
 	toolPrompt += resultFormat
