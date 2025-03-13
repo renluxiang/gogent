@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"github.com/sashabaranov/go-openai"
 	"log"
 	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/sashabaranov/go-openai"
 )
 
 type ITool interface {
@@ -194,9 +195,15 @@ func thinkStepByStep(g *GenericAgent, msg, session string) (ret string) {
 	for tries := 0; tries < maxTries; tries++ {
 
 		think, action, finalAnswer := g.extractSections(resp)
-		g.GetLogger().Info("Chat: ", think)
-		g.GetLogger().Info("Action: ", action)
-		g.GetLogger().Info("Final answer: ", finalAnswer)
+		if think != "" {
+			g.GetLogger().Info("Think: ", think)
+		}
+		if action != "" {
+			g.GetLogger().Info("Action: ", action)
+		}
+		if finalAnswer != "" {
+			g.GetLogger().Info("Final answer: ", finalAnswer)
+		}
 
 		// Check if response format is correct
 		if think == "" && action == "" && finalAnswer == "" {
@@ -214,9 +221,6 @@ func thinkStepByStep(g *GenericAgent, msg, session string) (ret string) {
 			continue
 		}
 
-		if think != "" {
-			g.GetLogger().Info("Chat: ", think)
-		}
 		if action != "" {
 			lines := strings.Split(action, "\n")
 			result := "你的工具使用结果：\n"
