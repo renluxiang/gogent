@@ -1,5 +1,3 @@
-# GoGent - Go Agent Framework
-
 # GoGent - A Lightweight Agent Framework in Go
 
 GoGent is a lightweight, flexible agent framework written in Go that simplifies the creation and management of AI agents. It provides easy integration with LLM APIs (like OpenAI) and supports tool augmentation, making it perfect for building conversational agents with advanced capabilities.
