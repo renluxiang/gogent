@@ -155,7 +155,7 @@ Your response should follow the format below. If you believe you have completed 
 }
 
 func (g *GenericAgent) Chat(msg string, session string) string {
-	msg = g.GetPrompt() + "\n问题：" + msg
+	msg = "now:" + time.Now().Format(time.RFC3339) + "\n" + g.GetPrompt() + "\nmsg：" + msg
 	ret := thinkStepByStep(g, msg, session)
 	return ret
 }
