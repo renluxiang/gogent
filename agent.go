@@ -96,6 +96,11 @@ func (g *GenericAgent) WithTools(tools []ITool) *GenericAgent {
 	return g
 }
 
+func (g *GenericAgent) WithMemory(memory IMemory) *GenericAgent {
+	g.memory = memory
+	return g
+}
+
 type GenericAgent struct {
 	BaseAgent
 	b      IBrain
