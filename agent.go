@@ -96,11 +96,18 @@ func (g *GenericAgent) WithTools(tools []ITool) *GenericAgent {
 	return g
 }
 
+func (g *GenericAgent) WithMemory(memory IMemory) *GenericAgent {
+	g.memory = memory
+	return g
+}
+
 type GenericAgent struct {
 	BaseAgent
 	b      IBrain
 	log    ILogger
 	memory IMemory
+
+	Mutex sync.Mutex
 }
 
 func (g *GenericAgent) GetLogger() ILogger {
@@ -156,6 +163,8 @@ Your response should follow the format below. If you believe you have completed 
 }
 
 func (g *GenericAgent) Chat(msg string, session string) string {
+	g.Mutex.Lock()
+	defer g.Mutex.Unlock()
 	msg = g.GetPrompt() + "\nmsg：" + msg
 	ret := thinkStepByStep(g, msg, session)
 	return ret
