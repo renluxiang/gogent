@@ -72,6 +72,9 @@ func (b *GenericAgent) WithPromptFunc(pf func() string) *GenericAgent {
 }
 
 func (b *BaseAgent) GetPrompt() string {
+	if b.promptFunc == nil {
+		return ""
+	}
 	return b.promptFunc()
 }
 
