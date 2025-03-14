@@ -51,7 +51,7 @@ type BaseAgent struct {
 	tools            []ITool
 	responsibilities []string
 	systemPrompt     string
-	prompt           string
+	promptFunc       func() string
 }
 
 var dLog ILogger = &defaultLogger{}
@@ -66,13 +66,13 @@ func (b *BaseAgent) SetName(name string) {
 	b.name = name
 }
 
-func (b *GenericAgent) WithPrompt(prompt string) *GenericAgent {
-	b.prompt = prompt
+func (b *GenericAgent) WithPromptFunc(pf func() string) *GenericAgent {
+	b.promptFunc = pf
 	return b
 }
 
 func (b *BaseAgent) GetPrompt() string {
-	return b.prompt
+	return b.promptFunc()
 }
 
 func (b *GenericAgent) WithSystemPrompt(prompt string) *GenericAgent {
@@ -156,7 +156,7 @@ Your response should follow the format below. If you believe you have completed 
 }
 
 func (g *GenericAgent) Chat(msg string, session string) string {
-	msg = "now:" + time.Now().Format(time.RFC3339) + "\n" + g.GetPrompt() + "\nmsg：" + msg
+	msg = g.GetPrompt() + "\nmsg：" + msg
 	ret := thinkStepByStep(g, msg, session)
 	return ret
 }
