@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"github.com/sashabaranov/go-openai"
 	"log"
 	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/sashabaranov/go-openai"
 )
 
 type ITool interface {
@@ -100,6 +101,8 @@ type GenericAgent struct {
 	b      IBrain
 	log    ILogger
 	memory IMemory
+
+	Mutex sync.Mutex
 }
 
 func (g *GenericAgent) GetLogger() ILogger {
@@ -155,6 +158,8 @@ Your response should follow the format below. If you believe you have completed 
 }
 
 func (g *GenericAgent) Chat(msg string, session string) string {
+	g.Mutex.Lock()
+	defer g.Mutex.Unlock()
 	msg = "now:" + time.Now().Format(time.RFC3339) + "\n" + g.GetPrompt() + "\nmsg：" + msg
 	ret := thinkStepByStep(g, msg, session)
 	return ret
