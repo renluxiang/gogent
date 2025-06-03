@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+
 	"github.com/renluxiang/gogent"
 )
 
@@ -10,7 +13,24 @@ func main() {
 		ExampleTool{},
 	})
 	agent.Start()
-	agent.Chat("hello, can you print example?", "")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Enter input for the agent (type 'exit' to quit):")
+
+	for scanner.Scan() {
+		input := scanner.Text()
+		if input == "exit" {
+			break
+		}
+
+		fmt.Println("Input:", input)
+		output := agent.Chat(input, "")
+		fmt.Println("Output:", output)
+	}
+
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "Error reading input:", err)
+	}
 }
 
 type ExampleTool struct {

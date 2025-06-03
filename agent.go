@@ -47,11 +47,10 @@ const resultFormat = `<response>
 `
 
 type BaseAgent struct {
-	name             string
-	tools            []ITool
-	responsibilities []string
-	systemPrompt     string
-	promptFunc       func() string
+	name         string
+	tools        []ITool
+	systemPrompt string
+	promptFunc   func() string
 }
 
 var dLog ILogger = &defaultLogger{}
@@ -190,7 +189,6 @@ func (g *GenericAgent) think(msg, session string) string {
 	return resp.Content
 }
 
-// thinkStepByStep 处理问题，支持多次反思和工具调用
 func thinkStepByStep(g *GenericAgent, msg, session string) (ret string) {
 	defer func() {
 		if err := recover(); err != nil {
